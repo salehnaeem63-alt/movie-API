@@ -1,85 +1,309 @@
-# 🎬 Movie Rate API
+# Movie API
 
-A robust RESTful API built with **Node.js, Express, and MongoDB** that allows users to explore movies, rate them once, leave comments, and manage a database of creators (actors, directors, etc.). This project features secure authentication and role-based access control.
+Movie API is a backend RESTful API for a movie rating website.
 
-## 🚀 Features
+The system allows users to register, login, search for movies by name or year, rate movies, comment on movies, and view the highest-rated movies.
 
-* **User Authentication**: Secure Register and Login system using **JWT** (JSON Web Tokens) and **Bcrypt** for password hashing.
-* **Movie Management**: Full CRUD operations for movies, including details like genre, duration, and release year.
-* **Creator Profiles**: Dedicated endpoints to manage actors, directors, and writers.
-* **Unique Rating System**: Users can rate a movie only once. The API automatically calculates and updates the average rating in real-time.
-* **Commenting System**: Authenticated users can leave feedback on their favorite films.
-* **Image Uploads**: Integrated **Multer** for handling movie and creator profile images.
-* **Admin Privileges**: Sensitive operations (adding/updating movies and creators) are protected by Admin-level middleware.
-* **Advanced Filtering**: Search movies by name, release year, or specific creators.
+The API also includes admin management features, where admins can add, update, delete movies, upload movie images, and manage creators such as actors, directors, and writers.
 
 ---
 
-## 🛠️ Tech Stack
+## Features
 
-* **Backend**: Node.js, Express.js
-* **Database**: MongoDB (Mongoose ODM)
-* **Security**: JWT, Bcrypt, Joi (Validation)
-* **File Handling**: Multer
-* **Tools**: Postman (Testing), Cors, Express-Async-Handler
+### Authentication & Users
 
----
+- User registration
+- User login
+- Password hashing using bcrypt
+- JWT-based authentication
+- Delete user
+- Protected routes for logged-in users
 
-## 📂 Project Structure
+### Admin Features
 
-* **`/model`**: Mongoose schemas for Movies, Users, and Creators.
-* **`/rout`**: API endpoints organized by resource.
-* **`/middlewear`**: Custom logic for Authentication and Admin verification.
-* **`/image`**: Local storage for uploaded assets.
+- Admin authorization
+- Add new movies
+- Update movie information
+- Delete movies
+- Upload movie images using Multer
+- Manage movie creators
 
----
+### Movie Features
 
-## 📡 API Endpoints (Quick Reference)
+- Get all movies
+- Get movie by ID
+- Search movies by name
+- Search movies by year
+- Rate movies
+- Comment on movies
+- View highest-rated movies
 
-### 🔑 Authentication
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| POST | `/api/user/register` | Register a new account |
-| POST | `/api/user/login` | Login and receive JWT |
+### Creator Features
 
-### 🎥 Movies
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| GET | `/api/movie` | Get movies (Query by name/year/creator) |
-| GET | `/api/movie/top` | Get movies sorted by highest rating |
-| POST | `/api/movie` | Add a movie (**Admin Only**) |
-| PUT | `/api/movie/rate/:id` | Submit a 1-10 star rating |
-| PUT | `/api/movie/comment/:id` | Add a comment to a movie |
-
-### 🎭 Creators
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| GET | `/api/creator/:id` | Get creator details |
-| POST | `/api/creator` | Add new creator (**Admin Only**) |
+- Add creator
+- Get all creators
+- Get creator by ID
+- Search creator by name and work type
+- Update creator
+- Delete creator
 
 ---
 
-## 🛠️ Installation & Setup
+## Tech Stack
 
-1.  **Clone the repository**:
-    ```bash
-    git clone [https://github.com/yourusername/movie-API.git](https://github.com/yourusername/movie-API.git)
-    ```
-2.  **Install dependencies**:
-    ```bash
-    npm install
-    ```
-3.  **Database Connection**:
-    Ensure MongoDB is running locally at `mongodb://127.0.0.1:27017/moviesrate`.
-4.  **Run the server**:
-    ```bash
-    node app.js
-    ```
-    *The server will start on `http://localhost:5000`*
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT
+- bcrypt
+- Multer
+- Joi
+- Postman
 
 ---
 
-## 📝 Future Improvements
-* [ ] Implement Cloudinary for cloud-based image storage.
-* [ ] Add Refresh Token logic for better security.
-* [ ] Integrate a frontend (React/Vue) to consume the API.
+## Project Structure
+
+```bash
+movie-api/
+│
+├── controllers/
+│   ├── authController.js
+│   ├── movieController.js
+│   ├── creatorController.js
+│   └── imageController.js
+│
+├── models/
+│   ├── User.js
+│   ├── Movie.js
+│   └── Creator.js
+│
+├── routes/
+│   ├── authRoutes.js
+│   ├── movieRoutes.js
+│   ├── creatorRoutes.js
+│   └── imageRoutes.js
+│
+├── middleware/
+│   ├── authMiddleware.js
+│   └── adminMiddleware.js
+│
+├── uploads/
+│
+├── app.js
+├── package.json
+└── README.md
+```
+
+---
+
+##  Installation and Setup
+
+###  Clone the repository
+
+```bash
+git clone https://github.com/saleh-naeem/movie-API.git
+cd movie-api
+```
+
+###  Install dependencies
+
+```bash
+npm install
+```
+
+
+
+### Run the project
+
+```bash
+node app
+```
+
+The server will run on:
+
+```bash
+http://localhost:3000
+```
+
+---
+
+## 🔐 Authentication
+
+Some routes are protected and require a JWT token.
+
+After login, copy the token and send it in the request headers:
+
+```http
+Authorization: Bearer token
+```
+
+---
+
+## API Endpoints
+
+### Auth Routes
+
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| POST | `/api/aoth/regester` | Register new user | Public |
+| POST | `/api/aoth/login` | Login user | Public |
+
+Examples:
+
+```http
+POST http://localhost:3000/api/aoth/regester
+POST http://localhost:3000/api/aoth/login
+```
+
+
+---
+
+### Movie Routes
+
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| GET | `/api/movie` | Get all movies | Public |
+| POST | `/api/movie` | Create new movie | Admin |
+| GET | `/api/movie/:id` | Get movie by ID | Public |
+| GET | `/api/movie?year=2020` | Search movies by year | Public |
+| GET | `/api/movie?name=movieName` | Search movies by name | Public |
+| POST / PUT | `/api/movie/rate/:id` | Rate a movie | Logged-in User |
+| PUT | `/api/movie/:id` | Update movie | Admin |
+| DELETE | `/api/movie/:id` | Delete movie | Admin |
+
+Examples:
+
+```http
+GET http://localhost:3000/api/movie
+GET http://localhost:3000/api/movie?year=2020
+GET http://localhost:3000/api/movie/68f39ef64801b4603ffb1b69
+POST http://localhost:3000/api/movie
+POST http://localhost:3000/api/movie/rate/68f39ef64801b4603ffb1b69
+```
+
+---
+
+### Creator Routes
+
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| GET | `/api/creator` | Get all creators | Public |
+| POST | `/api/creator` | Create new creator | Admin |
+| GET | `/api/creator/:id` | Get creator by ID | Public |
+| GET | `/api/creator?workAS=actor&name=name` | Search creator by name and work type | Public |
+| PUT | `/api/creator/:id` | Update creator | Admin |
+| DELETE | `/api/creator/:id` | Delete creator | Admin |
+
+Examples:
+
+```http
+GET http://localhost:3000/api/creator
+POST http://localhost:3000/api/creator
+GET http://localhost:3000/api/creator?workAS=actor&name=hasham%20maged
+GET http://localhost:3000/api/creator/68ea3dec0587caa99e4075c7
+```
+
+---
+
+### Image Upload Routes
+
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| POST | `/api/image/uplode` | Upload movie image | Admin |
+
+Example:
+
+```http
+POST http://localhost:3000/api/image/uplode
+```
+
+---
+
+## Testing
+
+The API was tested using Postman.
+
+You can test the API by sending requests to:
+
+```bash
+http://localhost:3000
+```
+
+For protected routes, include the JWT token in the request headers:
+
+```http
+Authorization: Bearer token
+```
+
+---
+
+##  Main Dependencies
+
+```json
+{
+  "express": "Backend framework",
+  "mongoose": "MongoDB object modeling",
+  "jsonwebtoken": "JWT authentication",
+  "bcrypt": "Password hashing",
+  "multer": "Image upload handling",
+  "joi": "Input validation"
+}
+```
+
+---
+
+## User Roles
+
+### User
+
+Users can:
+
+- Register
+- Login
+- View movies
+- Search movies
+- Rate movies
+- Comment on movies
+
+### Admin
+
+Admins can:
+
+- Add movies
+- Update movies
+- Delete movies
+- Upload movie images
+- Manage creators
+- Manage users
+
+---
+
+##  what i do
+
+I built the full backend API for this project, including:
+
+- Designing and developing REST API endpoints
+- Implementing user authentication and login system
+- Adding JWT authorization
+- Creating admin authorization
+- Building movie CRUD operations
+- Building creator CRUD operations
+- Implementing movie rating and comments
+- Adding image upload using Multer
+- Connecting the API with MongoDB using Mongoose
+- Testing the API using Postman
+- Validating inputs using Joi
+
+---
+
+## Links
+
+- GitHub Repository: `https://github.com/saleh-naeem/movie-API`
+
+---
+
+## 📄 License
+
+This project is for learning and portfolio purposes.
